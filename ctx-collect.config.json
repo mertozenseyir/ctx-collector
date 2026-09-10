@@ -1,19 +1,22 @@
 {
-  "frontendRoot": "C:/Users/johndoe/source/AcmeShop-UI",
-  "backendRoot": "C:/Users/johndoe/source/AcmeShop-API",
+  "frontendRoot": "D:/Projects/SeyirMobilNG-UI",
+  "backendRoot": "D:/Projects/SeyirMobil-API",
   "output": "./output",
 
   "entries": [
-    "src/app/pages/orders/order-detail/order-detail.component.ts"
+    "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-my-workflows/ng-fleet-my-workflows.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflow-tracking-list/ng-fleet-workflow-tracking-list.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflows/ng-fleet-workflows.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflows/ng-fleet-workflow-detail/ng-fleet-workflow-detail.component.ts"
   ],
 
   "backendEntries": [],
 
-  "frontendDepth": 0,
-  "backendServiceDepth": 2,
+  "frontendDepth": 1,
+  "backendServiceDepth": 1,
   "backendOnlyIncludeUi": true,
 
-  "backendIgnore": ["AcmeShop.Mobile.API", "AcmeShop.Internal.API"],
+  "backendIgnore": ["Internal.API", "NgAdmin.API","NgMobile.API","Tavi.API"],
 
   "aliases": {
     "src/": "src/",

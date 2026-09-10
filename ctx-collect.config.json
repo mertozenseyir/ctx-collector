@@ -1,0 +1,24 @@
+{
+  "frontendRoot": "C:/Users/johndoe/source/AcmeShop-UI",
+  "backendRoot": "C:/Users/johndoe/source/AcmeShop-API",
+  "output": "./output",
+
+  "entries": [
+    "src/app/pages/orders/order-detail/order-detail.component.ts"
+  ],
+
+  "backendEntries": [],
+
+  "frontendDepth": 0,
+  "backendServiceDepth": 2,
+  "backendOnlyIncludeUi": true,
+
+  "backendIgnore": ["AcmeShop.Mobile.API", "AcmeShop.Internal.API"],
+
+  "aliases": {
+    "src/": "src/",
+    "@app/": "src/app/",
+    "@env/": "src/environments/",
+    "@shared/": "src/app/shared/"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "ctx-collector",
+  "version": "1.0.0",
+  "description": "Angular component -> bağımlılık + API zinciri toplayıcı",
+  "type": "module",
+  "bin": {
+    "ctx-collect": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.2"
+  }
+}

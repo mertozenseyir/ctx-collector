@@ -161,7 +161,31 @@ function isServiceLike(name) {
   return ['Service', 'Repository', 'Manager', 'Handler'].some(s => bare.endsWith(s));
 }
 function isModelLike(name) {
-  return ['Dto', 'Model', 'Entity', 'Request', 'Response', 'Command', 'Query'].some(s => name.endsWith(s));
+  return ['Dto', 'Model', 'Entity', 'Request', 'Response', 'Command', 'Query',
+          'VM', 'ViewModel', 'Detail', 'Item', 'Result', 'Info'].some(s => name.endsWith(s));
+}
+// service/repo/controller/interface DEĞİLSE ve index'te varsa model adayıdır.
+// backendModelIncludeAll açıkken suffix konvansiyonuna bakmadan tüm proje-içi
+// veri tiplerini model kabul eder.
+function isModelCandidate(name, index, cfg) {
+  if (!index.typeIndex.has(name)) return false;
+  if (cfg.backendStopTypes.includes(name)) return false;
+  if (isServiceLike(name)) return false;
+  if (/^I[A-Z]/.test(name)) return false;              // arayüz
+  if (/Controller$/.test(name)) return false;
+  if (cfg.backendModelIncludeAll === false) return isModelLike(name);
+  return true; // proje-içi, servis/arayüz/controller değil -> model say
+}
+
+// Bir metin bloğundaki tüm model-aday tiplerini bulur (new X(), dönüş, değişken, imza vs.)
+function modelsInText(text, index, cfg) {
+  const out = new Set();
+  const ID_RE = /\b([A-Z][A-Za-z0-9_]{2,})\b/g;
+  let m;
+  while ((m = ID_RE.exec(text))) {
+    if (isModelCandidate(m[1], index, cfg)) out.add(m[1]);
+  }
+  return out;
 }
 
 // Bir service dosyasında constructor DI alanı adı -> tip eşlemesi
@@ -230,9 +254,8 @@ export function scanBackend(endpoints, index, cfg) {
       }
       for (const [type, methods] of Object.entries(methodsByField))
         enqueueService(type, methods, 1);
-      // action imza/gövdesindeki DTO'lar
-      for (const t of typesIn(block, index, cfg, true))
-        if (isModelLike(t)) enqueueModel(t);
+      // action imza + GÖVDESİNDEKİ tüm model-aday tipler (new X(), dönüş, değişken...)
+      for (const t of modelsInText(block, index, cfg)) enqueueModel(t);
     }
   }
 
@@ -274,29 +297,33 @@ export function scanBackend(endpoints, index, cfg) {
         }
         for (const [t, ms] of Object.entries(methodsByField))
           enqueueService(t, ms, depth + 1);
-        // metotlardaki DTO'lar
-        for (const t of typesIn(scanText, index, cfg, true))
-          if (isModelLike(t)) enqueueModel(t);
+        // metot gövdelerindeki tüm model-aday tipler
+        for (const t of modelsInText(scanText, index, cfg)) enqueueModel(t);
       } else {
-        // metot bulunamadıysa sadece imza tiplerini al (patlamayı önlemek için gövde tarama yok)
-        for (const t of typesIn(src, index, cfg, true))
-          if (isModelLike(t)) enqueueModel(t);
+        // metot bulunamadıysa sadece imza satırlarındaki modelleri al (gövde tarama yok)
+        const sigLines = (src.match(/^[^{}]*\([^)]*\)/gm) || []).join("\n");
+        for (const t of modelsInText(sigLines, index, cfg)) enqueueModel(t);
       }
     }
   }
 
-  // 3) MODEL zinciri (property tipleri, service'e sıçramaz)
+  // 3) MODEL zinciri: model dosyasının property/alan tiplerini bir kademe takip et.
+  //    Konvansiyona uymayan iç içe modeller de yakalanır. Service'e sıçramaz
+  //    (isModelCandidate service/arayüz/controller'ı zaten eler).
   while (modelQueue.length) {
     const t = modelQueue.shift();
     for (const f of (index.typeIndex.get(t) || [])) {
       collected.add(f);
       const src = index.fileText.get(f);
-      const propRe = /\b(?:public|internal)\s+([A-Za-z0-9_<>,\[\]\?]+)\s+[A-Za-z_][A-Za-z0-9_]*\s*(?:\{|;|=>)/g;
+      // property/alan satırlarındaki tipler
+      const propRe = /\b(?:public|internal|protected)\s+([A-Za-z0-9_<>,\[\]\?\.]+)\s+[A-Za-z_][A-Za-z0-9_]*\s*(?:\{|;|=>|=)/g;
       let m;
       while ((m = propRe.exec(src))) {
-        for (const pt of typesIn(m[1], index, cfg, false))
-          if (isModelLike(pt)) enqueueModel(pt);
+        for (const pt of modelsInText(m[1], index, cfg)) enqueueModel(pt);
       }
+      // kalıtım: "class X : BaseDto" -> base tipini de al
+      const baseM = /\bclass\s+[A-Za-z0-9_]+\s*(?:<[^>]*>)?\s*:\s*([^\{]+)\{/.exec(src);
+      if (baseM) for (const pt of modelsInText(baseM[1], index, cfg)) enqueueModel(pt);
     }
   }
 

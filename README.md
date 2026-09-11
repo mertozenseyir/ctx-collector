@@ -88,6 +88,12 @@ Mod seçimi otomatik: komut satırında component verirsen normal mod; vermezsen
   `paths` yoksa varsayılanı bırak.
 - `frontendDepth` — frontend import zinciri derinliği. `0` = sınırsız, `1` = sadece
   giriş component'inin doğrudan importları.
+- `backendModelIncludeAll` — `true` (varsayılan): zincirde işlenen metotların
+  gövde + imzasında geçen HER proje-içi veri tipini model olarak toplar; isim
+  konvansiyonuna (`Dto/Model/...`) uymayan modeller (`Company`, `WorkFlowItem`),
+  gövdede `new X()` ile üretilenler ve iç içe/kalıtımla bağlı modeller de gelir.
+  `false` yaparsan yalnızca konvansiyona uyan tipler alınır. Kapsam yine sadece
+  UI'ın gittiği metotlarla sınırlıdır; kullanılmayan metotlardaki modeller gelmez.
 - `backendServiceDepth` — bir service'ten alt service/repository'ye kaç kademe inilir
   (varsayılan `2`). Service içinde SADECE çağrılan endpoint metotlarının kullandığı
   alt-servisler izlenir; kullanılmayan metotlardaki bağımlılıklar (örn. yalnız başka

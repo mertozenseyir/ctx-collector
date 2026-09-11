@@ -7,13 +7,18 @@
     "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-my-workflows/ng-fleet-my-workflows.component.ts",
     "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflow-tracking-list/ng-fleet-workflow-tracking-list.component.ts",
     "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflows/ng-fleet-workflows.component.ts",
-    "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflows/ng-fleet-workflow-detail/ng-fleet-workflow-detail.component.ts"
+    "src/app/pages/main/ng-fleet/ng-fleet-workflow-management/ng-fleet-workflows/ng-fleet-workflow-detail/ng-fleet-workflow-detail.component.ts",
+    "src/app/pages/main/ng-fleet/shared/ng-fleet-workflow-common-detail/ng-fleet-workflow-common-detail.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-forms/ng-fleet-user-form-responsibilities/ng-fleet-user-form-responsibilities.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-forms/ng-fleet-user-assigned-forms/ng-fleet-user-assigned-forms.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-forms/ng-fleet-form-designs/ng-fleet-form-designs.component.ts",
+    "src/app/pages/main/ng-fleet/ng-fleet-forms/ng-fleet-form-designs/ng-fleet-form-designer/ng-fleet-form-designer.component.ts"
   ],
 
   "backendEntries": [],
 
-  "frontendDepth": 1,
-  "backendServiceDepth": 1,
+  "frontendDepth": 4,
+  "backendServiceDepth": 4,
   "backendOnlyIncludeUi": true,
 
   "backendIgnore": ["Internal.API", "NgAdmin.API","NgMobile.API","Tavi.API"],

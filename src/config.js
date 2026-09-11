@@ -72,6 +72,12 @@ export const DEFAULT_CONFIG = {
     'Command', 'Query', 'Handler', 'Validator'
   ],
 
+  // Model/DTO toplama: true ise (varsayılan) isim konvansiyonuna bakmadan,
+  // zincirde işlenen metotların gövde+imzasında geçen HER proje-içi veri tipini
+  // (service/repo/controller/arayüz hariç) model olarak toplar. false ise sadece
+  // backendFollowSuffixes/Dto/Model gibi konvansiyona uyan tipler alınır.
+  backendModelIncludeAll: true,
+
   // Backend zincirinde bir service'ten alt-service'e kaç kademe inilsin.
   // 1 = controller→service→repository (dur). 2 = bir kademe daha. Yüksek = daha çok dosya.
   backendServiceDepth: 2,
